@@ -38,6 +38,17 @@ server.on('request', (request, response) => {
         response.end();
       }
     });
+  } else if (request.method === 'GET' && request.url === '/get') {
+    request.on('error', (err) => {
+      console.error(err);
+    }).on('data', (chunk) => {
+    }).on('end', () => {
+      console.log("GET /get !");
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'text/plain');
+      response.write(`${seconds}\n`);
+      response.end();
+    })
   } else if (request.method === 'GET' && request.url === '/reset') {
     request.on('error', (err) => {
       console.error(err);
@@ -46,9 +57,9 @@ server.on('request', (request, response) => {
       console.log("GET /reset !");
       response.statusCode = 200;
       response.setHeader('Content-Type', 'text/plain');
-      response.write(`${seconds}\n`);
-      reset_time(); //FUU
-      response.end();
+      seconds = 0; //каво
+      console.log('Reset')
+      response.end('Таймер обнулился.\n');
     })
   } else if (request.method === 'GET' && request.url === '/pause') {
     //Ля мне лень уже написать ответ сервера лол
@@ -80,9 +91,4 @@ server.listen(port, hostname, () => {
 function update_time() {
 	seconds++;
 	console.log(`seconds = ${seconds}`);
-}
-
-function reset_time() {
-	seconds = 0; //каво
-	console.log(`Reset seconds: ${seconds}`);
 }
