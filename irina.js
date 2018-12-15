@@ -43,9 +43,11 @@ server.on('request', (request, response) => {
       console.error(err);
     }).on('data', (chunk) => {
     }).on('end', () => {
-      console.log("GET /get !");
+      //console.log("GET /get !");
       response.statusCode = 200;
       response.setHeader('Content-Type', 'text/plain');
+      //following is for CORS purposes; should be for all endpts really
+      response.setHeader('Access-Control-Allow-Origin', '*');
       response.write(`${seconds}\n`);
       response.end();
     })
@@ -90,5 +92,10 @@ server.listen(port, hostname, () => {
 
 function update_time() {
 	seconds++;
-	console.log(`seconds = ${seconds}`);
+	//console.log(`seconds = ${seconds}`);
 }
+
+
+var im_alive = setInterval(function(){
+  console.log('Таймер ещё жив! Seconds = ' + seconds);
+}, 60000)

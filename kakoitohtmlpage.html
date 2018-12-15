@@ -1,0 +1,26 @@
+<head>
+<!--This is how you write a comment-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+  // jQuery methods go here...
+  var display = $('#time');
+  var timestring = "таймера нет пока что";
+  var getter_interval = setInterval(function() {
+    $.get("http://127.0.0.1:3000/get", function(data, status){
+      //console.log("Got data: " + data + "\nGot status: " + status);
+      timestring = data;
+    });
+  }, 200);
+  var display_interval = setInterval(function() {
+    display.text(timestring);
+  }, 200);
+
+});
+</script>
+</head>
+
+<div class="timer">
+    <h1 id="time"></h1>
+</div>
