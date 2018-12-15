@@ -33,7 +33,7 @@ server.on('request', (request, response) => {
         } else {
           response.write('Таймер начался снова!\n');
         }
-        response.write(`${seconds}\n`);
+        response.write(`${secs_to_hms(parseInt(seconds))}\n`);
         a_timeout_object = setInterval(update_time, 1000);
         response.end();
       }
@@ -48,7 +48,7 @@ server.on('request', (request, response) => {
       response.setHeader('Content-Type', 'text/plain');
       //following is for CORS purposes; should be for all endpts really
       response.setHeader('Access-Control-Allow-Origin', '*');
-      response.write(`${seconds}\n`);
+      response.write(`${secs_to_hms(parseInt(seconds))}\n`);
       response.end();
     })
   } else if (request.method === 'GET' && request.url === '/reset') {
@@ -60,7 +60,6 @@ server.on('request', (request, response) => {
       response.statusCode = 200;
       response.setHeader('Content-Type', 'text/plain');
       seconds = 0; //каво
-      console.log('Reset')
       response.end('Таймер обнулился.\n');
     })
   } else if (request.method === 'GET' && request.url === '/pause') {
@@ -92,10 +91,26 @@ server.listen(port, hostname, () => {
 
 function update_time() {
 	seconds++;
-	//console.log(`seconds = ${seconds}`);
+	//console.log(`seconds = ${secs_to_hms(parseInt(seconds))}`);
 }
-
 
 var im_alive = setInterval(function(){
   console.log('Таймер ещё жив! Seconds = ' + seconds);
-}, 60000)
+}, 10000)
+
+function secs_to_hms(s) {
+
+  secs = s % 60;
+  mins = Math.floor(s/60);
+  hrs = Math.floor(mins/60);
+  mins = mins % 60;
+
+  mins = mins < 10 ? "0" + mins : mins;
+  secs = secs < 10 ? "0" + secs : secs;
+
+  if (hrs > 0) {
+    return hrs + " : " + mins + " : " + secs; //uwa, types
+  } else {
+    return mins + " : " + secs; //uwa, types
+  }
+}
